@@ -50,16 +50,6 @@ class MainFragment : Fragment() {
         viewModel.mainDataList.observe(viewLifecycleOwner, Observer {
             mainRecyclerViewAdapter.updateList(it)
         })
-        val listener = object: SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.mainDataList.value?.let { it -> mainRecyclerViewAdapter.updateList(it.filter { newText.toString() in it.name }) }
-                return true
-            }
-        }
         mainSearchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
