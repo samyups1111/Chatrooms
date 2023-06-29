@@ -35,7 +35,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getMainData(index: Int): MainData {
-        return mainDataList.value!![index]
+    fun getMainData(name: String): MainData {
+        return mainDataList.value!!.filter {
+            it.name == name
+        }[0]
+    }
+
+    fun getFilteredList(newText: String?): List<MainData> {
+        return mainDataList.value!!.filter {
+            newText.toString() in it.name
+        }
     }
 }

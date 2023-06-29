@@ -10,7 +10,7 @@ import com.sample.mainapplication.R
 
 class MainRecyclerViewAdapter(): RecyclerView.Adapter<MainRecyclerViewAdapter.MainViewHolder>() {
 
-    var onItemClick: ((Int) -> Unit)? = null
+    var onItemClick: ((String) -> Unit)? = null
     private var itemList = emptyList<MainData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
@@ -34,15 +34,17 @@ class MainRecyclerViewAdapter(): RecyclerView.Adapter<MainRecyclerViewAdapter.Ma
 
     inner class MainViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-        private val nameTextView: TextView = itemView.findViewById(R.id.name)
+        private val nameTextView: TextView
+
+        init {
+            nameTextView = itemView.findViewById(R.id.name)
+        }
 
         fun bind(mainData: MainData) {
             nameTextView.text = mainData.name
-        }
 
-        init {
             itemView.setOnClickListener {
-                onItemClick?.invoke(adapterPosition)
+                onItemClick?.invoke(mainData.name)
             }
         }
     }

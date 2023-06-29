@@ -28,7 +28,7 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         nameTextView = view.findViewById(R.id.name)
         val args: SecondFragmentArgs by navArgs()
-        val mainData = viewModel.getMainData(args.index)
+        val mainData = viewModel.getMainData(args.name)
         nameTextView.text = mainData.name
     }
 }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -19,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainFragment : Fragment() {
 
     private lateinit var mainRecyclerView : RecyclerView
+    private lateinit var mainSearchView: SearchView
     private lateinit var mainRecyclerViewAdapter : MainRecyclerViewAdapter
     private val viewModel by activityViewModels<MainViewModel>()
 
@@ -30,8 +32,9 @@ class MainFragment : Fragment() {
 
         mainRecyclerView = view.findViewById(R.id.main_fragment_recyclerview)
         mainRecyclerViewAdapter = MainRecyclerViewAdapter()
-        mainRecyclerViewAdapter.onItemClick = { index ->
-            val action = MainFragmentDirections.actionMainFragmentToSecondFragment(index)
+        mainSearchView = view.findViewById(R.id.main_search_view)
+        mainRecyclerViewAdapter.onItemClick = { mainDataName ->
+            val action = MainFragmentDirections.actionMainFragmentToSecondFragment(mainDataName)
             view.findNavController().navigate(action)
         }
         mainRecyclerView.apply {
@@ -47,5 +50,34 @@ class MainFragment : Fragment() {
         viewModel.mainDataList.observe(viewLifecycleOwner, Observer {
             mainRecyclerViewAdapter.updateList(it)
         })
+        val listener = object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.mainDataList.value?.let { it -> mainRecyclerViewAdapter.updateList(it.filter { newText.toString() in it.name }) }
+                return true
+            }
+        }
+        mainSearchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val filteredList = viewModel.getFilteredList(newText)
+                mainRecyclerViewAdapter.updateList(filteredList)
+                return true
+            }
+        })
+    }
+
+    override fun onPause() {
+        // closes keyboard which clears Query
+        if (!mainSearchView.isIconified) {
+            mainSearchView.isIconified = true
+        }
+        super.onPause()
     }
 }
