@@ -1,5 +1,6 @@
 package com.sample.mainapplication.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,7 +25,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getMainDataList() {
+    @VisibleForTesting
+    suspend fun getMainDataList() {
 
         val result = repository.getMainDataList()
 
