@@ -1,4 +1,4 @@
-package com.sample.mainapplication.ui
+package com.sample.mainapplication.ui.main
 
 import com.sample.mainapplication.model.MainData
 import com.sample.mainapplication.networking.MainService

@@ -1,4 +1,4 @@
-package com.sample.mainapplication.ui.mainfragment
+package com.sample.mainapplication.ui.first
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sample.mainapplication.model.MainData
 import com.sample.mainapplication.R
 
-class MainRecyclerViewAdapter(): RecyclerView.Adapter<MainRecyclerViewAdapter.MainViewHolder>() {
+class FirstRecyclerViewAdapter(): RecyclerView.Adapter<FirstRecyclerViewAdapter.MainViewHolder>() {
 
     var onItemClick: ((String) -> Unit)? = null
     private var itemList = emptyList<MainData>()

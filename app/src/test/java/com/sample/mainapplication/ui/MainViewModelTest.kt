@@ -3,6 +3,8 @@ package com.sample.mainapplication.ui
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.sample.mainapplication.model.MainData
 import com.sample.mainapplication.networking.NetworkResult
+import com.sample.mainapplication.ui.main.MainRepository
+import com.sample.mainapplication.ui.main.MainViewModel
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

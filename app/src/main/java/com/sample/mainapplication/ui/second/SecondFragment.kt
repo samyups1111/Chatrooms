@@ -1,4 +1,4 @@
-package com.sample.mainapplication.ui
+package com.sample.mainapplication.ui.second
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.sample.mainapplication.R
-import com.sample.mainapplication.ui.SecondFragmentArgs
+import com.sample.mainapplication.ui.main.MainViewModel
 
 class SecondFragment : Fragment() {
 

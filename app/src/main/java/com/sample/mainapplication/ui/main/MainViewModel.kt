@@ -1,4 +1,4 @@
-package com.sample.mainapplication.ui
+package com.sample.mainapplication.ui.main
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData

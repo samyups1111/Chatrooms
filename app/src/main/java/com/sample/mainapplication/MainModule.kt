@@ -1,8 +1,10 @@
 package com.sample.mainapplication
 
 import com.sample.mainapplication.networking.MainRemoteDataSource
-import com.sample.mainapplication.ui.MainRepository
-import com.sample.mainapplication.ui.MainViewModel
+import com.sample.mainapplication.ui.main.MainRepository
+import com.sample.mainapplication.ui.main.MainViewModel
+import com.sample.mainapplication.ui.login.AuthRepository
+import com.sample.mainapplication.ui.login.LoginViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,4 +30,14 @@ class MainModule {
     @Provides
     @Singleton
     fun provideMainService() = MainRemoteDataSource()
+
+    @Provides
+    @Singleton
+    fun provideLoginViewModel(
+        authRepository: AuthRepository,
+    ) = LoginViewModel(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository() = AuthRepository()
 }
