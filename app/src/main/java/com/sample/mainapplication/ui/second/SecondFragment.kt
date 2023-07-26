@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.sample.mainapplication.R
 import com.sample.mainapplication.ui.main.MainViewModel
@@ -30,5 +31,10 @@ class SecondFragment : Fragment() {
         val args: SecondFragmentArgs by navArgs()
         val mainData = viewModel.getMainData(args.name)
         nameTextView.text = mainData.name
+
+        nameTextView.setOnClickListener {
+            val action = SecondFragmentDirections.actionSecondFragmentToChatFragment()
+            view.findNavController().navigate(action)
+        }
     }
 }

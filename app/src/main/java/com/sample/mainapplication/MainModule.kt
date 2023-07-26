@@ -1,6 +1,8 @@
 package com.sample.mainapplication
 
+import com.sample.mainapplication.model.ChatRepository
 import com.sample.mainapplication.networking.MainRemoteDataSource
+import com.sample.mainapplication.ui.chat.ChatViewModel
 import com.sample.mainapplication.ui.main.MainRepository
 import com.sample.mainapplication.ui.main.MainViewModel
 import com.sample.mainapplication.ui.login.AuthRepository
@@ -40,4 +42,14 @@ class MainModule {
     @Provides
     @Singleton
     fun provideAuthRepository() = AuthRepository()
+
+    @Provides
+    @Singleton
+    fun provideChatViewModel(
+        chatRepository: ChatRepository,
+    ) = ChatViewModel(chatRepository)
+
+    @Provides
+    @Singleton
+    fun provideChatRepository() = ChatRepository()
 }
