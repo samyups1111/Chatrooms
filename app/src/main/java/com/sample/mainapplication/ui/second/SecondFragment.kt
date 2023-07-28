@@ -33,7 +33,7 @@ class SecondFragment : Fragment() {
         nameTextView.text = mainData.name
 
         nameTextView.setOnClickListener {
-            val action = SecondFragmentDirections.actionSecondFragmentToChatFragment()
+            val action = SecondFragmentDirections.actionSecondFragmentToChatFragment(mainData.name)
             view.findNavController().navigate(action)
         }
     }

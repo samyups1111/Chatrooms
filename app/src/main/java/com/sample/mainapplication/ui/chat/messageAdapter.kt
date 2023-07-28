@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.mainapplication.R
+import com.sample.mainapplication.model.Message
 
 class MessageAdapter: RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 
-    var messages = emptyList<String>()
+    private var messages = emptyList<Message>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.message_item, parent, false)
@@ -25,17 +26,19 @@ class MessageAdapter: RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
         holder.bind(currentItem)
     }
 
-    fun updateList(newList: List<String>) {
+    fun updateList(newList: List<Message>) {
         messages = newList
         notifyDataSetChanged()
     }
 
     inner class MessageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-        val messageTextView: TextView = itemView.findViewById(R.id.message)
+        private val messageTextView: TextView = itemView.findViewById(R.id.message)
+        private val usernameTexView: TextView = itemView.findViewById(R.id.username)
 
-        fun bind(message: String) {
-            messageTextView.text = message
+        fun bind(message: Message) {
+            messageTextView.text = message.text
+            usernameTexView.text = message.userName
         }
     }
 }

@@ -11,6 +11,11 @@ class ChatViewModel @Inject constructor(
     private val chatRepository: ChatRepository,
 ): ViewModel() {
 
-    fun setMessage(message: String?) = message.let { chatRepository.myRef.setValue(it) }
-    fun getMessagesFlow() = chatRepository.getMessagesRealtime()
+    fun getMessagesFlow(pokeName: String) = chatRepository.getMessagesRealtime(pokeName)
+
+    fun writeNewMessage(
+        messageId: String,
+        name: String,
+        message: String,
+    ) = chatRepository.writeNewMessage(messageId, name, message)
 }

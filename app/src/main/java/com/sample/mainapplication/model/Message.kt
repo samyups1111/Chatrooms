@@ -1,5 +1,9 @@
 package com.sample.mainapplication.model
 
+import com.google.firebase.database.IgnoreExtraProperties
+
+@IgnoreExtraProperties
 data class Message(
-    val text: String,
+    val userName: String? = null,
+    val text: String? = null,
 )

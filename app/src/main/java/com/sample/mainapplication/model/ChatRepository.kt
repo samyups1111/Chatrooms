@@ -13,21 +13,40 @@ import javax.inject.Inject
 class ChatRepository @Inject constructor() {
 
     private val databaseFirebase = Firebase.database
-    val myRef = databaseFirebase.getReference("message")
+    val messagesDatabase = databaseFirebase.getReference("messages")
 
-    fun getMessagesRealtime(): Flow<String> = callbackFlow {
+    fun getMessagesRealtime(pokeName: String): Flow<List<Message>> = callbackFlow {
         val firebaseDataListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val messages = snapshot.value as String
-                trySend(messages)
+                val list = mutableListOf<Message>()
+                val data = snapshot.children
+
+                data.forEach {
+                    it.getValue(Message::class.java)?.let { it1 -> list.add(it1) }
+                }
+                trySend(list)
             }
             override fun onCancelled(error: DatabaseError) {
-                trySend(error.message)
             }
         }
-        myRef.addValueEventListener(firebaseDataListener)
+        messagesDatabase.child(pokeName).addValueEventListener(firebaseDataListener)
         awaitClose {
-            myRef.removeEventListener(firebaseDataListener)
+            messagesDatabase.removeEventListener(firebaseDataListener)
+        }
+    }
+
+    fun writeNewMessage(
+        messageId: String,
+        name: String,
+        message: String,
+    ) {
+        val message = Message(
+            userName = name,
+            text = message,
+        )
+        val key = messagesDatabase.push().key
+        if (key != null) {
+            messagesDatabase.child(messageId).child(key).setValue(message)
         }
     }
 
