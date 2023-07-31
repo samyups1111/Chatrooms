@@ -39,17 +39,17 @@ class ChatFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_chat, container, false)
         enterMessageEt = view.findViewById(R.id.enter_message_edit_text)
-        setupSubmitButton(view)
+        writeNewMessage(view)
         setupRecyclerView(view)
         loadMessages()
         return view
     }
 
-    private fun setupSubmitButton(view: View) {
+    private fun writeNewMessage(view: View) {
         submitButton = view.findViewById(R.id.submit_button)
         submitButton.setOnClickListener {
             val message = enterMessageEt.text.toString()
-            vm.writeNewMessage(args.pokemonName, "sam", message)
+            vm.writeNewMessage(args.pokemonName, message)
             enterMessageEt.text.clear()
             it.hideKeyboard()
         }

@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sample.mainapplication.R
 import com.sample.mainapplication.networking.LoginResult
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,27 +36,30 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setRegistrationObserver(view)
+        setupLoginTextView(view)
+        setupSubmitButton(view)
+
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.visibility = View.GONE
+    }
+
+    private fun setupSubmitButton(view: View) {
         usernameEditText = view.findViewById(R.id.username)
         passwordEditText = view.findViewById(R.id.password)
         submitButton = view.findViewById(R.id.register)
-        loginText = view.findViewById(R.id.login_textview)
-        setRegistrationObserver()
-        setUpGoToLoginButton()
-        setUpRegisterButton()
-    }
 
-    private fun setUpRegisterButton() {
         submitButton.setOnClickListener {
-            val username = usernameEditText.text.toString()
+            val email = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
             viewModel.onRegister(
-                email = username,
+                email = email,
                 password = password,
             )
         }
     }
 
-    private fun setRegistrationObserver() {
+    private fun setRegistrationObserver(view: View) {
         viewModel.registrationResult.observe(viewLifecycleOwner) { registrationResult ->
             when (registrationResult) {
                 is LoginResult.MISSING_USERNAME -> {
@@ -68,17 +72,18 @@ class RegisterFragment : Fragment() {
                     Toast.makeText(this.context, registrationResult.text, Toast.LENGTH_LONG).show()
                 }
                 LoginResult.SUCCESS -> {
-                    val action = RegisterFragmentDirections.actionRegisterFragmentToFirstFragment()
-                    view?.findNavController()?.navigate(action)
+                    val action = RegisterFragmentDirections.actionRegisterFragmentToSignupFragment()
+                    view.findNavController().navigate(action)
                 }
             }
         }
     }
 
-    private fun setUpGoToLoginButton() {
+    private fun setupLoginTextView(view: View) {
+        loginText = view.findViewById(R.id.login_textview)
         loginText.setOnClickListener {
             val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-            view?.findNavController()?.navigate(action)
+            view.findNavController().navigate(action)
         }
     }
 }

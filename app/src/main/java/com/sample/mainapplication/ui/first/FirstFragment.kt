@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sample.mainapplication.R
 import com.sample.mainapplication.ui.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +45,9 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.visibility = View.VISIBLE
 
         viewModel.mainDataList.observe(viewLifecycleOwner) {
             firstRecyclerViewAdapter.updateList(it)

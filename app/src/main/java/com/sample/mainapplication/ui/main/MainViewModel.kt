@@ -38,9 +38,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun getMainData(name: String): MainData {
-        return mainDataList.value!!.filter {
+        return mainDataList.value?.filter {
             it.name == name
-        }[0]
+        }?.get(0) ?: MainData()
     }
 
     fun getFilteredList(newText: String?): List<MainData> {

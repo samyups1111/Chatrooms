@@ -1,9 +1,10 @@
 package com.sample.mainapplication.ui.chat
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sample.mainapplication.model.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,7 +16,6 @@ class ChatViewModel @Inject constructor(
 
     fun writeNewMessage(
         messageId: String,
-        name: String,
         message: String,
-    ) = chatRepository.writeNewMessage(messageId, name, message)
+    ) = viewModelScope.launch { chatRepository.writeNewMessage(messageId, message) }
 }

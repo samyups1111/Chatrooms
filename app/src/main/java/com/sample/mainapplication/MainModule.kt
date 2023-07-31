@@ -7,6 +7,8 @@ import com.sample.mainapplication.ui.main.MainRepository
 import com.sample.mainapplication.ui.main.MainViewModel
 import com.sample.mainapplication.ui.login.AuthRepository
 import com.sample.mainapplication.ui.login.LoginViewModel
+import com.sample.mainapplication.ui.login.SignupViewModel
+import com.sample.mainapplication.ui.profile.ProfileViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,38 +20,44 @@ import javax.inject.Singleton
 class MainModule {
 
     @Provides
-    @Singleton
     fun provideMainFragmentViewModel(
         mainRepository: MainRepository,
     ) = MainViewModel(mainRepository)
 
     @Provides
-    @Singleton
     fun provideMainRepository(
         mainRemoteDataSource: MainRemoteDataSource,
     ) = MainRepository(mainRemoteDataSource.mainService)
 
     @Provides
-    @Singleton
     fun provideMainService() = MainRemoteDataSource()
 
     @Provides
-    @Singleton
     fun provideLoginViewModel(
         authRepository: AuthRepository,
     ) = LoginViewModel(authRepository)
+
+    @Provides
+    fun provideSignupViewModel(
+        authRepository: AuthRepository,
+    ) = SignupViewModel(authRepository)
+
+    @Provides
+    fun provideProfileViewModel(
+        authRepository: AuthRepository,
+    ) = ProfileViewModel(authRepository)
 
     @Provides
     @Singleton
     fun provideAuthRepository() = AuthRepository()
 
     @Provides
-    @Singleton
     fun provideChatViewModel(
         chatRepository: ChatRepository,
     ) = ChatViewModel(chatRepository)
 
     @Provides
-    @Singleton
-    fun provideChatRepository() = ChatRepository()
+    fun provideChatRepository(
+        authRepository: AuthRepository,
+    ) = ChatRepository(authRepository.user)
 }

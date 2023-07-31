@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
-class ChatRepository @Inject constructor() {
-
-    private val databaseFirebase = Firebase.database
-    val messagesDatabase = databaseFirebase.getReference("messages")
+class ChatRepository @Inject constructor(
+    val user: Flow<User>,
+) {
+    val messagesDatabase = Firebase.database.getReference("messages")
 
     fun getMessagesRealtime(pokeName: String): Flow<List<Message>> = callbackFlow {
         val firebaseDataListener = object : ValueEventListener {
@@ -35,20 +35,20 @@ class ChatRepository @Inject constructor() {
         }
     }
 
-    fun writeNewMessage(
+    suspend fun writeNewMessage(
         messageId: String,
-        name: String,
         message: String,
     ) {
-        val message = Message(
-            userName = name,
-            text = message,
-        )
-        val key = messagesDatabase.push().key
-        if (key != null) {
-            messagesDatabase.child(messageId).child(key).setValue(message)
+        user.collect {
+            val message = Message(
+                userName = it.userName,
+                text = message,
+            )
+            val key = messagesDatabase.push().key
+            if (key != null) {
+                messagesDatabase.child(messageId).child(key).setValue(message)
+            }
         }
+
     }
-
-
 }

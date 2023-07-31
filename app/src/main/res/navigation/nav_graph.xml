@@ -44,11 +44,12 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
-            android:id="@+id/action_registerFragment_to_firstFragment"
-            app:destination="@id/firstFragment" />
-        <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_signupFragment"
+            app:destination="@+id/signupFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -67,4 +68,28 @@
             android:name="pokemon_name"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.sample.mainapplication.ui.login.SignupFragment"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_signup" >
+        <action
+            android:id="@+id/action_signupFragment_to_firstFragment"
+            app:destination="@id/firstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.sample.mainapplication.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_profile_fragment"
+        app:destination="@+id/profileFragment" />
+    <action
+        android:id="@+id/action_global_first_fragment"
+        app:destination="@+id/firstFragment" />
 </navigation>
