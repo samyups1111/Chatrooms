@@ -1,11 +1,11 @@
-package com.sample.mainapplication.ui.login
+package com.sample.mainapplication.model
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
-import com.sample.mainapplication.model.User
 import com.sample.mainapplication.networking.LoginResult
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -13,15 +13,13 @@ class AuthRepository @Inject constructor() {
 
     val auth = Firebase.auth
 
-    val user = flow<User> {
-        val userRemote = auth.currentUser
-        val name = userRemote?.displayName
-        val id = userRemote?.uid
-        emit(
-            User(
-                userId = id ?: "error",
-                userName = name ?: "unknown",
-        ))
+    val user = flow {
+        emit(auth.currentUser!!)
+    }.map {
+        User(
+            userId = it.uid,
+            userName = it.displayName ?: "unknown",
+        )
     }
 
     suspend fun createUser(

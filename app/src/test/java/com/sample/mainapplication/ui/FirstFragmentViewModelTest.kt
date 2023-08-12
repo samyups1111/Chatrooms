@@ -3,8 +3,8 @@ package com.sample.mainapplication.ui
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.sample.mainapplication.model.MainData
 import com.sample.mainapplication.networking.NetworkResult
-import com.sample.mainapplication.ui.main.MainRepository
-import com.sample.mainapplication.ui.main.MainViewModel
+import com.sample.mainapplication.model.PokemonRepository
+import com.sample.mainapplication.ui.first.FirstFragmentViewModel
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,16 +15,16 @@ import org.junit.Before
 import org.junit.Rule
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class MainViewModelTest {
+internal class FirstFragmentViewModelTest {
 
-    private lateinit var mainRepository: MainRepository
-    private lateinit var vm: MainViewModel
+    private lateinit var pokemonRepository: PokemonRepository
+    private lateinit var vm: FirstFragmentViewModel
 
     @Before
     fun setup() {
-        mainRepository = mockk()
-        coEvery { mainRepository.getMainDataList() } returns NetworkResult.Success(mockMainDataList)
-        vm = MainViewModel(mainRepository)
+        pokemonRepository = mockk()
+        coEvery { pokemonRepository.getMainDataList() } returns NetworkResult.Success(mockMainDataList)
+        vm = FirstFragmentViewModel(pokemonRepository)
     }
 
     @get:Rule

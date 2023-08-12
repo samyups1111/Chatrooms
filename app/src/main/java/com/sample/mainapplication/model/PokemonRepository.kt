@@ -1,4 +1,4 @@
-package com.sample.mainapplication.ui.main
+package com.sample.mainapplication.model
 
 import com.sample.mainapplication.model.MainData
 import com.sample.mainapplication.networking.MainService
@@ -6,7 +6,7 @@ import com.sample.mainapplication.networking.NetworkResult
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class MainRepository @Inject constructor(
+class PokemonRepository @Inject constructor(
     private val mainService: MainService,
 ){
 
@@ -32,5 +32,9 @@ class MainRepository @Inject constructor(
         } catch (e: Throwable) {
             NetworkResult.Exception(e)
         }
+    }
+
+    suspend fun getPokemonByName(name: String): MainData {
+        return mainService.getPokemonByName(name)
     }
 }

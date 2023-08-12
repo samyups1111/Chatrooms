@@ -3,12 +3,13 @@ package com.sample.mainapplication
 import com.sample.mainapplication.model.ChatRepository
 import com.sample.mainapplication.networking.MainRemoteDataSource
 import com.sample.mainapplication.ui.chat.ChatViewModel
-import com.sample.mainapplication.ui.main.MainRepository
-import com.sample.mainapplication.ui.main.MainViewModel
-import com.sample.mainapplication.ui.login.AuthRepository
+import com.sample.mainapplication.model.PokemonRepository
+import com.sample.mainapplication.ui.first.FirstFragmentViewModel
+import com.sample.mainapplication.model.AuthRepository
 import com.sample.mainapplication.ui.login.LoginViewModel
 import com.sample.mainapplication.ui.login.SignupViewModel
 import com.sample.mainapplication.ui.profile.ProfileViewModel
+import com.sample.mainapplication.ui.second.SecondFragmentViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,14 +21,19 @@ import javax.inject.Singleton
 class MainModule {
 
     @Provides
-    fun provideMainFragmentViewModel(
-        mainRepository: MainRepository,
-    ) = MainViewModel(mainRepository)
+    fun provideFirstFragmentViewModel(
+        pokemonRepository: PokemonRepository,
+    ) = FirstFragmentViewModel(pokemonRepository)
+
+    @Provides
+    fun provideSecondFragmentViewModel(
+        pokemonRepository: PokemonRepository,
+    ) = SecondFragmentViewModel(pokemonRepository)
 
     @Provides
     fun provideMainRepository(
         mainRemoteDataSource: MainRemoteDataSource,
-    ) = MainRepository(mainRemoteDataSource.mainService)
+    ) = PokemonRepository(mainRemoteDataSource.mainService)
 
     @Provides
     fun provideMainService() = MainRemoteDataSource()

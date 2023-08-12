@@ -1,5 +1,6 @@
 package com.sample.mainapplication.networking
 
+import com.sample.mainapplication.model.MainData
 import com.sample.mainapplication.model.MainResponse
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -27,4 +28,7 @@ interface MainService {
 
     @GET("pokemon")
     suspend fun getMyDataList(): Response<MainResponse>
+
+    @GET("pokemon/{name}")
+    suspend fun getPokemonByName(name: String): MainData
 }

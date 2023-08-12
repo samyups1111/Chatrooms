@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sample.mainapplication.R
-import com.sample.mainapplication.ui.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,17 +20,27 @@ class FirstFragment : Fragment() {
     private lateinit var mainRecyclerView : RecyclerView
     private lateinit var mainSearchView: SearchView
     private lateinit var firstRecyclerViewAdapter : FirstRecyclerViewAdapter
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<FirstFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_first, container, false)
+        return inflater.inflate(R.layout.fragment_first, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setMainDatListObserver()
+        setNavBar()
+        setRecyclerView(view)
+        setSearchView(view)
+    }
+
+    private fun setRecyclerView(view: View) {
         mainRecyclerView = view.findViewById(R.id.main_fragment_recyclerview)
         firstRecyclerViewAdapter = FirstRecyclerViewAdapter()
-        mainSearchView = view.findViewById(R.id.main_search_view)
+
         firstRecyclerViewAdapter.onItemClick = { mainDataName ->
             val action = FirstFragmentDirections.actionFirstFragmentToSecondFragment(mainDataName)
             view.findNavController().navigate(action)
@@ -40,18 +49,21 @@ class FirstFragment : Fragment() {
             layoutManager = LinearLayoutManager(view.context)
             adapter = firstRecyclerViewAdapter
         }
-        return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomNav.visibility = View.VISIBLE
-
+    private fun setMainDatListObserver() {
         viewModel.mainDataList.observe(viewLifecycleOwner) {
             firstRecyclerViewAdapter.updateList(it)
         }
+    }
+
+    private fun setNavBar() {
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.visibility = View.VISIBLE
+    }
+
+    private fun setSearchView(view: View) {
+        mainSearchView = view.findViewById(R.id.main_search_view)
         mainSearchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
