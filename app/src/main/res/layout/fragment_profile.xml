@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.profile.ProfileFragment">
 
     <EditText
@@ -10,13 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/name"
-        android:autofillHints="name"
         android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:text="@string/save" />
 
     <Button

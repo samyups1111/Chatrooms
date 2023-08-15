@@ -41,9 +41,14 @@ class ProfileFragment : Fragment() {
             val action = ProfileFragmentDirections.actionProfileFragmentToRegisterFragment()
             view.findNavController().navigate(action)
         }
+        nameEditText.setOnClickListener {
+            saveButton.visibility = View.VISIBLE
+        }
+
         saveButton.setOnClickListener {
             val name = nameEditText.text.toString()
             vm.updateUser(name)
+            it.visibility = View.GONE
         }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

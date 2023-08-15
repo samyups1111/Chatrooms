@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.mainapplication.R
 import com.sample.mainapplication.model.Message
+import java.time.format.DateTimeFormatter
 
 class MessageAdapter: RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 
@@ -35,10 +36,12 @@ class MessageAdapter: RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 
         private val messageTextView: TextView = itemView.findViewById(R.id.message)
         private val usernameTexView: TextView = itemView.findViewById(R.id.username)
+        private val dateTextView: TextView = itemView.findViewById(R.id.date)
 
         fun bind(message: Message) {
             messageTextView.text = message.text
             usernameTexView.text = message.userName
+            dateTextView.text = message.date?.let { Message.convertLongToTime(it) }
         }
     }
 }

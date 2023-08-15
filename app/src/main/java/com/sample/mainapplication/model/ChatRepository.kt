@@ -43,6 +43,7 @@ class ChatRepository @Inject constructor(
             val message = Message(
                 userName = it.userName,
                 text = message,
+                date = Message.currentTimeToLong(),
             )
             val key = messagesDatabase.push().key
             if (key != null) {
