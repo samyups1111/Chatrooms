@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class ChatRepository @Inject constructor(
-    val user: Flow<User>,
+    private val user: Flow<User>,
 ) {
-    val messagesDatabase = Firebase.database.getReference("messages")
+    private val messagesDatabase = Firebase.database.getReference("messages")
 
     fun getMessagesRealtime(pokeName: String): Flow<List<Message>> = callbackFlow {
         val firebaseDataListener = object : ValueEventListener {
@@ -22,7 +22,9 @@ class ChatRepository @Inject constructor(
                 val data = snapshot.children
 
                 data.forEach {
-                    it.getValue(Message::class.java)?.let { it1 -> list.add(it1) }
+                    it.getValue(Message::class.java)?.let { message ->
+                        list.add(message)
+                    }
                 }
                 trySend(list)
             }
@@ -41,6 +43,7 @@ class ChatRepository @Inject constructor(
     ) {
         user.collect {
             val message = Message(
+                userId = it.userId,
                 userName = it.userName,
                 text = message,
                 date = Message.currentTimeToLong(),
@@ -50,6 +53,5 @@ class ChatRepository @Inject constructor(
                 messagesDatabase.child(messageId).child(key).setValue(message)
             }
         }
-
     }
 }

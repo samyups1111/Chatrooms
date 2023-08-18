@@ -1,5 +1,6 @@
 package com.sample.mainapplication.ui.profile
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sample.mainapplication.model.AuthRepository
@@ -17,4 +18,6 @@ class ProfileViewModel @Inject constructor(
     fun signOut() = authRepository.signOut()
 
     fun updateUser(name: String) = viewModelScope.launch { authRepository.updateUser(name) }
+
+    fun savelocalProfileImgUriToFirebase(file: Uri) = authRepository.saveLocalProfileImgUriToFirebase(file)
 }

@@ -1,8 +1,13 @@
 package com.sample.mainapplication.model
 
+import android.net.Uri
+import android.util.Log
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.sample.mainapplication.networking.LoginResult
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -11,7 +16,8 @@ import javax.inject.Inject
 
 class AuthRepository @Inject constructor() {
 
-    val auth = Firebase.auth
+    private val auth = Firebase.auth
+    private val firebaseStorageRef = Firebase.storage.reference
 
     val user = flow {
         emit(auth.currentUser!!)
@@ -19,6 +25,7 @@ class AuthRepository @Inject constructor() {
         User(
             userId = it.uid,
             userName = it.displayName ?: "unknown",
+            profileImgUri = it.photoUrl,
         )
     }
 
@@ -64,6 +71,22 @@ class AuthRepository @Inject constructor() {
             LoginResult.SUCCESS
         }  catch (e : Exception) {
             LoginResult.ERROR(e.message.toString())
+        }
+    }
+
+    fun saveLocalProfileImgUriToFirebase(localProfileImgUri: Uri) {
+        val currentUser = auth.currentUser
+        val firebaseImgStorageRef: StorageReference = firebaseStorageRef.child("images")
+        if (currentUser != null && localProfileImgUri.lastPathSegment != null) {
+            val firebaseProfileImgStorageRef = firebaseImgStorageRef.child(currentUser.uid).child("profile_image").child(localProfileImgUri.lastPathSegment!!)
+            firebaseProfileImgStorageRef.putFile(localProfileImgUri).addOnFailureListener {
+                Log.d("sammy", "fail = ${it.message.toString()}")
+            }.addOnSuccessListener {
+                firebaseProfileImgStorageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val profileUpdates = UserProfileChangeRequest.Builder().setPhotoUri(uri).build()
+                    currentUser.updateProfile(profileUpdates)
+                }
+            }
         }
     }
 
