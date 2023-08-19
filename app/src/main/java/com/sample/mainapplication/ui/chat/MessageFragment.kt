@@ -24,20 +24,20 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ChatFragment : Fragment() {
+class MessageFragment : Fragment() {
 
-    private val vm by viewModels<ChatViewModel>()
+    private val vm by viewModels<MessageViewModel>()
     private lateinit var enterMessageEt: EditText
     private lateinit var submitButton: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var messageAdapter: MessageAdapter
-    private val args : ChatFragmentArgs by navArgs()
+    private val args : MessageFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_chat, container, false)
+        val view = inflater.inflate(R.layout.fragment_message, container, false)
         enterMessageEt = view.findViewById(R.id.enter_message_edit_text)
         writeNewMessage(view)
         setupRecyclerView(view)

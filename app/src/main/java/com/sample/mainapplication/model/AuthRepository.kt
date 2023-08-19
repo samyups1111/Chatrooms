@@ -78,7 +78,7 @@ class AuthRepository @Inject constructor() {
         val currentUser = auth.currentUser
         val firebaseImgStorageRef: StorageReference = firebaseStorageRef.child("images")
         if (currentUser != null && localProfileImgUri.lastPathSegment != null) {
-            val firebaseProfileImgStorageRef = firebaseImgStorageRef.child(currentUser.uid).child("profile_image").child(localProfileImgUri.lastPathSegment!!)
+            val firebaseProfileImgStorageRef = firebaseImgStorageRef.child(currentUser.uid).child("profile_image")//.child(localProfileImgUri.lastPathSegment!!)
             firebaseProfileImgStorageRef.putFile(localProfileImgUri).addOnFailureListener {
                 Log.d("sammy", "fail = ${it.message.toString()}")
             }.addOnSuccessListener {

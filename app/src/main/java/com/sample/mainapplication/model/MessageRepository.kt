@@ -1,19 +1,24 @@
 package com.sample.mainapplication.model
 
+import android.net.Uri
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class ChatRepository @Inject constructor(
+class MessageRepository @Inject constructor(
     private val user: Flow<User>,
 ) {
-    private val messagesDatabase = Firebase.database.getReference("messages")
+    private val messagesDatabaseRef = Firebase.database.getReference("messages")
+    private val firebaseStorageRef = Firebase.storage.reference
 
     fun getMessagesRealtime(pokeName: String): Flow<List<Message>> = callbackFlow {
         val firebaseDataListener = object : ValueEventListener {
@@ -31,9 +36,9 @@ class ChatRepository @Inject constructor(
             override fun onCancelled(error: DatabaseError) {
             }
         }
-        messagesDatabase.child(pokeName).addValueEventListener(firebaseDataListener)
+        messagesDatabaseRef.child(pokeName).addValueEventListener(firebaseDataListener)
         awaitClose {
-            messagesDatabase.removeEventListener(firebaseDataListener)
+            messagesDatabaseRef.removeEventListener(firebaseDataListener)
         }
     }
 
@@ -42,15 +47,17 @@ class ChatRepository @Inject constructor(
         message: String,
     ) {
         user.collect {
+            val profileImgUri = firebaseStorageRef.child("images").child(it.userId).child("profile_image").downloadUrl.await()
             val message = Message(
                 userId = it.userId,
                 userName = it.userName,
                 text = message,
                 date = Message.currentTimeToLong(),
+                userImgUri = profileImgUri.toString(),
             )
-            val key = messagesDatabase.push().key
+            val key = messagesDatabaseRef.push().key
             if (key != null) {
-                messagesDatabase.child(messageId).child(key).setValue(message)
+                messagesDatabaseRef.child(messageId).child(key).setValue(message)
             }
         }
     }

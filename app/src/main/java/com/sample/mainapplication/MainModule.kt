@@ -1,8 +1,8 @@
 package com.sample.mainapplication
 
-import com.sample.mainapplication.model.ChatRepository
+import com.sample.mainapplication.model.MessageRepository
 import com.sample.mainapplication.networking.MainRemoteDataSource
-import com.sample.mainapplication.ui.chat.ChatViewModel
+import com.sample.mainapplication.ui.chat.MessageViewModel
 import com.sample.mainapplication.model.PokemonRepository
 import com.sample.mainapplication.ui.first.FirstFragmentViewModel
 import com.sample.mainapplication.model.AuthRepository
@@ -59,11 +59,11 @@ class MainModule {
 
     @Provides
     fun provideChatViewModel(
-        chatRepository: ChatRepository,
-    ) = ChatViewModel(chatRepository)
+        messageRepository: MessageRepository,
+    ) = MessageViewModel(messageRepository)
 
     @Provides
     fun provideChatRepository(
         authRepository: AuthRepository,
-    ) = ChatRepository(authRepository.user)
+    ) = MessageRepository(authRepository.user)
 }

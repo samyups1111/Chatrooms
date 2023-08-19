@@ -9,7 +9,7 @@ import java.util.Date
 data class Message(
     val userId: String? = null,
     val userName: String? = null,
-    val userImg: Uri? = null,
+    val userImgUri: String? = null,
     val text: String? = null,
     val date: Long? = null,
 ) {

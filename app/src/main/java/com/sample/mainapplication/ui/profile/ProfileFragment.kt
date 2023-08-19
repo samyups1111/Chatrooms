@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sample.mainapplication.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -71,6 +72,7 @@ class ProfileFragment : Fragment() {
                             .with(requireContext())
                             .load(profileImgUri)
                             .centerCrop()
+                            .apply(RequestOptions.circleCropTransform())
                             .into(userProfileImageView)
                     }
                 }

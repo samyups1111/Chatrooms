@@ -3,13 +3,15 @@ package com.sample.mainapplication.ui.chat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sample.mainapplication.R
 import com.sample.mainapplication.model.Message
 import java.lang.IllegalArgumentException
-import java.time.format.DateTimeFormatter
-import java.util.Objects
 
 class MessageAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -93,11 +95,20 @@ class MessageAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val messageTextView: TextView = itemView.findViewById(R.id.message)
         private val usernameTexView: TextView = itemView.findViewById(R.id.username)
         private val dateTextView: TextView = itemView.findViewById(R.id.date)
+        private val profileImgImageView: ImageView = itemView.findViewById(R.id.user_icon)
 
         fun bind(message: Message) {
             messageTextView.text = message.text
             usernameTexView.text = message.userName
             dateTextView.text = message.date?.let { Message.convertLongToTime(it) }
+            message.userImgUri?.let { uriString ->
+                Glide
+                    .with(itemView.context)
+                    .load(uriString.toUri())
+                    .centerCrop()
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(profileImgImageView)
+            }
         }
     }
 

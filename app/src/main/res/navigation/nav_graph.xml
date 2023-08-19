@@ -35,8 +35,8 @@
             android:name="name"
             app:argType="string" />
         <action
-            android:id="@+id/action_secondFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
+            android:id="@+id/action_secondFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -60,10 +60,10 @@
             app:destination="@id/firstFragment" />
     </fragment>
     <fragment
-        android:id="@+id/chatFragment"
-        android:name="com.sample.mainapplication.ui.chat.ChatFragment"
-        android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" >
+        android:id="@+id/messageFragment"
+        android:name="com.sample.mainapplication.ui.chat.MessageFragment"
+        android:label="fragment_message"
+        tools:layout="@layout/fragment_message" >
         <argument
             android:name="pokemon_name"
             app:argType="string" />
