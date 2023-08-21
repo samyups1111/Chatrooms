@@ -1,12 +1,11 @@
 package com.sample.mainapplication.model
 
-import android.net.Uri
+import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -44,16 +43,21 @@ class MessageRepository @Inject constructor(
 
     suspend fun writeNewMessage(
         messageId: String,
-        message: String,
+        text: String,
     ) {
         user.collect {
-            val profileImgUri = firebaseStorageRef.child("images").child(it.userId).child("profile_image").downloadUrl.await()
+            val profileImgUri = try {
+                firebaseStorageRef.child("images").child(it.userId).child("profile_image").downloadUrl.await()
+            } catch (e: Exception) {
+                Log.d("Sammy", "error = $e")
+                null
+            }
             val message = Message(
                 userId = it.userId,
                 userName = it.userName,
-                text = message,
+                text = text,
                 date = Message.currentTimeToLong(),
-                userImgUri = profileImgUri.toString(),
+                userImgUri = profileImgUri?.toString(),
             )
             val key = messagesDatabaseRef.push().key
             if (key != null) {

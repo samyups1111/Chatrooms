@@ -59,7 +59,9 @@ class MessageFragment : Fragment() {
         recyclerView = view.findViewById(R.id.chat_recyclerview)
         messageAdapter = MessageAdapter()
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context).apply {
+                stackFromEnd = true
+            }
             adapter = messageAdapter
         }
     }
@@ -72,6 +74,7 @@ class MessageFragment : Fragment() {
                         Log.d(TAG, "exception $it")
                     }.collect {
                         messageAdapter.updateList(it)
+                        recyclerView.scrollToPosition(messageAdapter.itemCount - 1)
                     }
             }
         }

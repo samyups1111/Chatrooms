@@ -21,4 +21,6 @@
     <string name="sign_out">sign out</string>
     <string name="save">save</string>
     <string name="user_icon">user icon</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="message">message</string>
 </resources>
