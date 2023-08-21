@@ -101,7 +101,7 @@ class MessageAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             messageTextView.text = message.text
             usernameTexView.text = message.userName
             dateTextView.text = message.date?.let { Message.convertLongToTime(it) }
-            profileImgImageView.setImageDrawable(null)
+            profileImgImageView.setImageResource(R.drawable.smiley_face)
             message.userImgUri?.let { uriString ->
                 Glide
                     .with(itemView.context)
