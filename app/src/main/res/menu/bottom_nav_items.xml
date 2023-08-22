@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/search_bottom_nav"
-        android:title="@string/search_bottom_nav"
+        android:title="@string/chatrooms"
         android:icon="@drawable/common_google_signin_btn_text_dark_normal_background" />
 
     <item

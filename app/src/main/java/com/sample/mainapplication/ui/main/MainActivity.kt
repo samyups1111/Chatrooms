@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.search_bottom_nav -> navController.navigate(R.id.action_global_first_fragment)
+                R.id.search_bottom_nav -> navController.navigate(R.id.chatroomFragment) //navController.navigate(R.id.action_global_first_fragment)
                 R.id.profile_menu -> navController.navigate(R.id.action_global_profile_fragment)
                 else -> {}
             }

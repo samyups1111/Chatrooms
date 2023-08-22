@@ -16,7 +16,7 @@ import javax.inject.Inject
 class MessageRepository @Inject constructor(
     private val user: Flow<User>,
 ) {
-    private val messagesDatabaseRef = Firebase.database.getReference("messages")
+    private val messagesDatabaseRef = Firebase.database.getReference("chatrooms")//Firebase.database.getReference("messages")
     private val firebaseStorageRef = Firebase.storage.reference
 
     fun getMessagesRealtime(pokeName: String): Flow<List<Message>> = callbackFlow {
@@ -42,7 +42,7 @@ class MessageRepository @Inject constructor(
     }
 
     suspend fun writeNewMessage(
-        messageId: String,
+        chatroomName: String,
         text: String,
     ) {
         user.collect {
@@ -61,7 +61,7 @@ class MessageRepository @Inject constructor(
             )
             val key = messagesDatabaseRef.push().key
             if (key != null) {
-                messagesDatabaseRef.child(messageId).child(key).setValue(message)
+                messagesDatabaseRef.child(chatroomName).child(key).setValue(message)
             }
         }
     }

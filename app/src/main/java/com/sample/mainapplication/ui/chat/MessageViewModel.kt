@@ -15,7 +15,7 @@ class MessageViewModel @Inject constructor(
     fun getMessagesFlow(pokeName: String) = messageRepository.getMessagesRealtime(pokeName)
 
     fun writeNewMessage(
-        messageId: String,
+        chatroomName: String,
         message: String,
-    ) = viewModelScope.launch { messageRepository.writeNewMessage(messageId, message) }
+    ) = viewModelScope.launch { messageRepository.writeNewMessage(chatroomName, message) }
 }

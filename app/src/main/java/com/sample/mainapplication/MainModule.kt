@@ -6,6 +6,8 @@ import com.sample.mainapplication.ui.chat.MessageViewModel
 import com.sample.mainapplication.model.PokemonRepository
 import com.sample.mainapplication.ui.first.FirstFragmentViewModel
 import com.sample.mainapplication.model.AuthRepository
+import com.sample.mainapplication.model.ChatroomRepository
+import com.sample.mainapplication.ui.chatroom.ChatroomViewModel
 import com.sample.mainapplication.ui.login.LoginViewModel
 import com.sample.mainapplication.ui.login.SignupViewModel
 import com.sample.mainapplication.ui.profile.ProfileViewModel
@@ -66,4 +68,12 @@ class MainModule {
     fun provideChatRepository(
         authRepository: AuthRepository,
     ) = MessageRepository(authRepository.user)
+
+    @Provides
+    fun provideChatroomViewModel(
+        chatroomRepository: ChatroomRepository,
+    ) = ChatroomViewModel(chatroomRepository)
+
+    @Provides
+    fun provideChatromRepository() = ChatroomRepository()
 }

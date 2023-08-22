@@ -29,7 +29,7 @@ class SplashScreenFragment : Fragment() {
         val action = if (auth.currentUser == null) {
             SplashScreenFragmentDirections.actionSplashScreenFragmentToRegisterFragment()
         } else {
-            SplashScreenFragmentDirections.actionSplashScreenFragmentToFirstFragment()
+            SplashScreenFragmentDirections.actionSplashScreenFragmentToChatroomFragment()
         }
         view.findNavController().navigate(action)
     }
