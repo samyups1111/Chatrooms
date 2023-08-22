@@ -2,7 +2,7 @@ package com.sample.mainapplication
 
 import com.sample.mainapplication.model.MessageRepository
 import com.sample.mainapplication.networking.MainRemoteDataSource
-import com.sample.mainapplication.ui.chat.MessageViewModel
+import com.sample.mainapplication.ui.message.MessageViewModel
 import com.sample.mainapplication.model.PokemonRepository
 import com.sample.mainapplication.ui.first.FirstFragmentViewModel
 import com.sample.mainapplication.model.AuthRepository

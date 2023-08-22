@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/messageFragment"
-        android:name="com.sample.mainapplication.ui.chat.MessageFragment"
+        android:name="com.sample.mainapplication.ui.message.MessageFragment"
         android:label="fragment_message"
         tools:layout="@layout/fragment_message" >
         <argument

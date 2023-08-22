@@ -5,7 +5,7 @@
 
     <EditText
         android:id="@+id/create_new_chatroom_edittext"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
         android:hint="@string/room_title"

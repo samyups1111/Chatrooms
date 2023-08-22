@@ -20,11 +20,11 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         bottomNavigationView = findViewById(R.id.bottom_nav)
-        bottomNavigationView.selectedItemId = R.id.search_bottom_nav
+        bottomNavigationView.selectedItemId = R.id.chatroom_menu
 
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.search_bottom_nav -> navController.navigate(R.id.chatroomFragment) //navController.navigate(R.id.action_global_first_fragment)
+                R.id.chatroom_menu -> navController.navigate(R.id.chatroomFragment) //navController.navigate(R.id.action_global_first_fragment)
                 R.id.profile_menu -> navController.navigate(R.id.action_global_profile_fragment)
                 else -> {}
             }

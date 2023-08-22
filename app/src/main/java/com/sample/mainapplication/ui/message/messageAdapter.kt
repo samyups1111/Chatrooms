@@ -1,4 +1,4 @@
-package com.sample.mainapplication.ui.chat
+package com.sample.mainapplication.ui.message
 
 import android.view.LayoutInflater
 import android.view.View
