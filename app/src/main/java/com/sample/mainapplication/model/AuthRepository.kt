@@ -2,13 +2,12 @@ package com.sample.mainapplication.model
 
 import android.net.Uri
 import android.util.Log
-import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
+import com.google.firebase.storage.StorageReference
 import com.sample.mainapplication.networking.LoginResult
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -16,13 +15,12 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AuthRepository @Inject constructor() {
-
-    private val auth = Firebase.auth
-    private val userId: String? = auth.currentUser?.uid
-    private val imageStorageRef = userId?.let { Firebase.storage.reference.child("images").child(it) }
-    private val userDatabaseRef = userId?.let { Firebase.database.getReference("user").child(it) }
-
+class AuthRepository @Inject constructor(
+    private val auth: FirebaseAuth,
+    private val userId: String?,
+    private val imageStorageRef: StorageReference?,
+    private val userDatabaseRef: DatabaseReference?,
+) {
     val user: Flow<User> = callbackFlow {
         val firebaseDataListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

@@ -7,6 +7,7 @@ import com.sample.mainapplication.model.PokemonRepository
 import com.sample.mainapplication.ui.first.FirstFragmentViewModel
 import com.sample.mainapplication.model.AuthRepository
 import com.sample.mainapplication.model.ChatroomRepository
+import com.sample.mainapplication.networking.FirebaseDataSource
 import com.sample.mainapplication.ui.chatroom.ChatroomViewModel
 import com.sample.mainapplication.ui.login.LoginViewModel
 import com.sample.mainapplication.ui.login.SignupViewModel
@@ -57,7 +58,14 @@ class MainModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository() = AuthRepository()
+    fun provideAuthRepository(
+        firebaseDataSource: FirebaseDataSource,
+    ) = AuthRepository(
+        firebaseDataSource.auth,
+        firebaseDataSource.userId,
+        firebaseDataSource.imageStorageRef,
+        firebaseDataSource.userDatabaseRef,
+    )
 
     @Provides
     fun provideChatViewModel(
@@ -65,9 +73,13 @@ class MainModule {
     ) = MessageViewModel(messageRepository)
 
     @Provides
-    fun provideChatRepository(
+    fun provideMessageRepository(
         authRepository: AuthRepository,
-    ) = MessageRepository(authRepository.user)
+        firebaseDataSource: FirebaseDataSource,
+    ) = MessageRepository(
+        authRepository.user,
+        firebaseDataSource.chatroomDatabaseRef,
+    )
 
     @Provides
     fun provideChatroomViewModel(
@@ -75,5 +87,13 @@ class MainModule {
     ) = ChatroomViewModel(chatroomRepository)
 
     @Provides
-    fun provideChatromRepository() = ChatroomRepository()
+    @Singleton
+    fun provideFirebaseDataSource() = FirebaseDataSource()
+
+    @Provides
+    fun provideChatromRepository(
+        firebaseDataSource: FirebaseDataSource,
+    ) = ChatroomRepository(
+        firebaseDataSource.chatroomDatabaseRef,
+    )
 }
