@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -29,6 +30,7 @@ class ProfileFragment : Fragment() {
     private lateinit var nameEditText : EditText
     private lateinit var saveButton : Button
     private lateinit var userProfileImageView: ImageView
+    private lateinit var testTextView: TextView
     private val vm: ProfileViewModel by viewModels()
 
     override fun onCreateView(
@@ -43,6 +45,7 @@ class ProfileFragment : Fragment() {
         userProfileImageView = view.findViewById(R.id.user_icon_imageview)
         signoutButton = view.findViewById(R.id.sign_out_button)
         nameEditText = view.findViewById(R.id.name_edit_text)
+        testTextView = view.findViewById(R.id.test_textview)
         saveButton = view.findViewById(R.id.save_button)
         signoutButton.setOnClickListener {
             vm.signOut()
@@ -64,10 +67,13 @@ class ProfileFragment : Fragment() {
 
 
         viewLifecycleOwner.lifecycleScope.launch {
+            Log.d("sammy", "onLaunch")
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.userFlow.collect{ user ->
+                    Log.d("sammy", "onCollect. userName = ${user.userName}")
                     nameEditText.setText(user.userName)
-                    user.profileImgUri?.let { profileImgUri ->
+                    testTextView.setText(user.userName)
+                    user.photoUrl?.let { profileImgUri ->
                         Glide
                             .with(requireContext())
                             .load(profileImgUri)

@@ -2,42 +2,59 @@ package com.sample.mainapplication.model
 
 import android.net.Uri
 import android.util.Log
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.sample.mainapplication.networking.LoginResult
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor() {
 
     private val auth = Firebase.auth
-    private val firebaseStorageRef = Firebase.storage.reference
+    private val userId: String? = auth.currentUser?.uid
+    private val imageStorageRef = userId?.let { Firebase.storage.reference.child("images").child(it) }
+    private val userDatabaseRef = userId?.let { Firebase.database.getReference("user").child(it) }
 
-    val user = flow {
-        emit(auth.currentUser!!)
-    }.map {
-        User(
-            userId = it.uid,
-            userName = it.displayName ?: "unknown",
-            profileImgUri = it.photoUrl,
-        )
+    val user: Flow<User> = callbackFlow {
+        val firebaseDataListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)
+                if (user != null) {
+                    trySend(user)
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        }
+        userDatabaseRef?.addValueEventListener(firebaseDataListener)
+        awaitClose {
+            userDatabaseRef?.removeEventListener(firebaseDataListener)
+        }
     }
 
     suspend fun createUser(
-        email: String?,
-        password: String?,
+        email: String,
+        password: String,
     ): LoginResult {
-        if (email == null || email == "") return LoginResult.MISSING_USERNAME()
-        if (password == null || password == "") return LoginResult.MISSING_PASSWORD()
-
         try {
             auth.createUserWithEmailAndPassword(email, password).await()
+            val currentUser = auth.currentUser
+
+            if (currentUser != null) {
+                val newUser = User(
+                    userId = currentUser.uid,
+                    email = email,
+                )
+                userDatabaseRef?.child(currentUser.uid)?.setValue(newUser)?.await()
+            }
         } catch (e: Exception) {
             return LoginResult.ERROR(e.message ?: "unknown error")
         }
@@ -45,12 +62,9 @@ class AuthRepository @Inject constructor() {
     }
 
     suspend fun login(
-        email: String?,
-        password: String?,
+        email: String,
+        password: String,
     ): LoginResult {
-        if (email == null || email == "") return LoginResult.MISSING_USERNAME()
-        if (password == null || password == "") return LoginResult.MISSING_PASSWORD()
-
         try {
             auth.signInWithEmailAndPassword(email, password).await()
         } catch (e: Exception) {
@@ -59,34 +73,28 @@ class AuthRepository @Inject constructor() {
         return LoginResult.SUCCESS
     }
 
-    suspend fun updateUser(
+    suspend fun updateUserName(
         name: String,
     ) : LoginResult {
-        val user = auth.currentUser
-        val profileUpdates = userProfileChangeRequest {
-            displayName = name
-        }
         return try {
-            user!!.updateProfile(profileUpdates).await()
+            userId?.let {
+                userDatabaseRef?.child("userName")?.setValue(name)?.await()
+            }
             LoginResult.SUCCESS
         }  catch (e : Exception) {
             LoginResult.ERROR(e.message.toString())
         }
     }
 
-    fun saveLocalProfileImgUriToFirebase(localProfileImgUri: Uri) {
-        val currentUser = auth.currentUser
-        val firebaseImgStorageRef: StorageReference = firebaseStorageRef.child("images")
-        if (currentUser != null && localProfileImgUri.lastPathSegment != null) {
-            val firebaseProfileImgStorageRef = firebaseImgStorageRef.child(currentUser.uid).child("profile_image")//.child(localProfileImgUri.lastPathSegment!!)
-            firebaseProfileImgStorageRef.putFile(localProfileImgUri).addOnFailureListener {
-                Log.d("sammy", "fail = ${it.message.toString()}")
-            }.addOnSuccessListener {
-                firebaseProfileImgStorageRef.downloadUrl.addOnSuccessListener { uri ->
-                    val profileUpdates = UserProfileChangeRequest.Builder().setPhotoUri(uri).build()
-                    currentUser.updateProfile(profileUpdates)
-                }
-            }
+    fun updateUserPhotoUriOnFirebase(userPhotoUri: Uri) {
+        val userPhotoUriStorageRef = imageStorageRef?.child("profile_image")
+
+        try {
+            userDatabaseRef!!.child("photoUrl").setValue(userPhotoUri.toString())
+            userPhotoUriStorageRef!!
+                .putFile(userPhotoUri)
+        } catch (e: Exception) {
+            Log.d("sammy", "error = ${e.message}")
         }
     }
 

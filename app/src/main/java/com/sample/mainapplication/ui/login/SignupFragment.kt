@@ -41,7 +41,7 @@ class SignupFragment : Fragment() {
         vm.state.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is LoginResult.SUCCESS -> {
-                    val action = SignupFragmentDirections.actionSignupFragmentToFirstFragment()
+                    val action = SignupFragmentDirections.actionSignupFragmentToChatroomFragment()
                     view.findNavController().navigate(action)
                 }
                 is LoginResult.ERROR -> {

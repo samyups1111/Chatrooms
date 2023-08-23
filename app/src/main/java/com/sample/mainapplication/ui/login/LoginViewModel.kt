@@ -16,11 +16,6 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ): ViewModel() {
 
-    init {
-        //
-        Log.d("sam", "vm init")
-    }
-
     private val _registrationResult = MutableLiveData<LoginResult>()
     val registrationResult : LiveData<LoginResult> = _registrationResult
 
@@ -32,7 +27,10 @@ class LoginViewModel @Inject constructor(
         password: String?,
     ) {
         viewModelScope.launch {
-            _registrationResult.value = authRepository.createUser(email, password)
+            _registrationResult.value =
+                if (email == null || email == "") LoginResult.MISSING_USERNAME()
+                else if (password == null || password == "") LoginResult.MISSING_PASSWORD()
+                else authRepository.createUser(email, password)
         }
     }
 
@@ -41,7 +39,10 @@ class LoginViewModel @Inject constructor(
         password: String?,
     ) {
         viewModelScope.launch {
-            _loginResult.value = authRepository.login(email, password)
+            _loginResult.value =
+                if (email == null || email == "") LoginResult.MISSING_USERNAME()
+                else if (password == null || password == "") LoginResult.MISSING_PASSWORD()
+                else authRepository.login(email, password)
         }
     }
 }

@@ -17,7 +17,7 @@ class ProfileViewModel @Inject constructor(
 
     fun signOut() = authRepository.signOut()
 
-    fun updateUser(name: String) = viewModelScope.launch { authRepository.updateUser(name) }
+    fun updateUser(name: String) = viewModelScope.launch { authRepository.updateUserName(name) }
 
-    fun savelocalProfileImgUriToFirebase(file: Uri) = authRepository.saveLocalProfileImgUriToFirebase(file)
+    fun savelocalProfileImgUriToFirebase(file: Uri) = authRepository.updateUserPhotoUriOnFirebase(file)
 }

@@ -24,7 +24,7 @@ class SignupViewModel @Inject constructor(
         if (name.isNullOrBlank()) return
 
         viewModelScope.launch {
-            val result = authRepository.updateUser(name)
+            val result = authRepository.updateUserName(name)
             _state.value = result
         }
     }

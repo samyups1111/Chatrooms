@@ -25,6 +25,12 @@
         android:inputType="textPersonName"
         android:importantForAutofill="no" />
 
+    <TextView
+        android:id="@+id/test_textview"
+        android:text="nothing yhet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"

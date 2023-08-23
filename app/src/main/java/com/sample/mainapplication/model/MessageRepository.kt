@@ -16,7 +16,7 @@ import javax.inject.Inject
 class MessageRepository @Inject constructor(
     private val user: Flow<User>,
 ) {
-    private val messagesDatabaseRef = Firebase.database.getReference("chatrooms")//Firebase.database.getReference("messages")
+    private val messagesDatabaseRef = Firebase.database.getReference("chatrooms")
     private val firebaseStorageRef = Firebase.storage.reference
 
     fun getMessagesRealtime(pokeName: String): Flow<List<Message>> = callbackFlow {
@@ -47,7 +47,7 @@ class MessageRepository @Inject constructor(
     ) {
         user.collect {
             val profileImgUri = try {
-                firebaseStorageRef.child("images").child(it.userId).child("profile_image").downloadUrl.await()
+                firebaseStorageRef.child("images").child(it.userId!!).child("profile_image").downloadUrl.await()
             } catch (e: Exception) {
                 Log.d("Sammy", "error = $e")
                 null

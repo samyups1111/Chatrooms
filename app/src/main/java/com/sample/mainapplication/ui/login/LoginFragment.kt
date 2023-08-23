@@ -54,7 +54,7 @@ class LoginFragment : Fragment() {
                     Toast.makeText(this.context, loginResult.text, Toast.LENGTH_LONG).show()
                 }
                 LoginResult.SUCCESS -> {
-                    val action = LoginFragmentDirections.actionLoginFragmentToFirstFragment()
+                    val action = LoginFragmentDirections.actionLoginFragmentToChatroomFragment()
                     view?.findNavController()?.navigate(action)
                 }
             }
